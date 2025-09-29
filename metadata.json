@@ -1,0 +1,5 @@
+{
+  "name": "Copy of Prompt Injection Simulator",
+  "description": "An application to demonstrate and simulate prompt injection attacks using the Gemini API. Users can compare the output of a safe, original prompt with a user-poisoned prompt to understand the effects of injection.",
+  "requestFramePermissions": []
+}
