@@ -21,22 +21,22 @@ const LoadingSkeleton: React.FC = () => (
 
 const OutputCard: React.FC<OutputCardProps> = ({ title, subtitle, content, isLoading, icon, isPoisoned = false, inputTokens, outputTokens }) => {
   return (
-    <div className={`flex flex-col p-5 bg-white border-2 border-gray-900 transition-all duration-300`}>
-      <div className="flex items-center justify-between mb-3">
+    <div className={`flex flex-col p-5 bg-white border-2 border-black transition-all duration-300`}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
         <div className="flex items-center gap-3">
           {icon}
-          <h3 className={`text-xl font-bold text-gray-900`}>{title}</h3>
+          <h3 className={`text-xl font-bold text-black font-serif`}>{title}</h3>
         </div>
-        <div className="flex items-center gap-3 text-xs text-gray-600">
-            <span className="text-right">{subtitle}</span>
+        <div className="flex items-center gap-3 text-xs text-gray-600 justify-end">
+            <span className="text-right whitespace-nowrap">{subtitle}</span>
             {(inputTokens !== undefined && outputTokens !== undefined && !isLoading && content) && (
-                <span className="bg-white px-2 py-1 border border-gray-900">
+                <span className="bg-white px-2 py-1 border border-black whitespace-nowrap">
                     IN: {inputTokens} | OUT: {outputTokens}
                 </span>
             )}
         </div>
       </div>
-      <div className="prose prose-sm max-w-none text-gray-900 min-h-[6rem] whitespace-pre-wrap">
+      <div className="prose prose-sm max-w-none text-black min-h-[10rem] whitespace-pre-wrap font-sans">
         {isLoading ? <LoadingSkeleton /> : (content || <span className="text-gray-500">Output will appear here...</span>)}
       </div>
     </div>

@@ -14,8 +14,8 @@ interface ApiKeyInputProps {
 
 const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ apiKey, setApiKey }) => {
   return (
-    <div className="mb-6 p-4 border-2 border-gray-900">
-      <label htmlFor="api-key" className="block text-sm font-semibold text-gray-900 mb-2">
+    <section className="mt-4 p-6 border-2 border-black">
+      <label htmlFor="api-key" className="block text-xl font-bold text-black mb-2 font-serif">
         Gemini API Key
       </label>
       <div className="relative">
@@ -28,14 +28,14 @@ const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ apiKey, setApiKey }) => {
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
           placeholder="Enter your API key..."
-          className="w-full p-2 pl-10 bg-white border-2 border-gray-900 text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 transition-colors"
+          className="w-full p-2 pl-10 bg-white border-2 border-black text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors"
           aria-label="Gemini API Key Input"
         />
       </div>
       <p className="text-xs text-gray-600 mt-2">
         Your key is stored in your browser's localStorage and is not sent to any server other than Google's API.
       </p>
-    </div>
+    </section>
   );
 };
 

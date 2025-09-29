@@ -16,7 +16,7 @@ const PromptInput: React.FC<PromptInputProps> = ({ label, value, onChange, place
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between items-baseline">
-        <label className="text-sm font-semibold text-gray-900">{label}</label>
+        <label className="text-lg font-bold text-black font-serif">{label}</label>
         <div className="flex items-center gap-3 text-xs">
           {maxLength !== undefined && (
             <span className={isLimitReached ? 'text-red-600 font-semibold' : 'text-gray-600'}>
@@ -34,7 +34,7 @@ const PromptInput: React.FC<PromptInputProps> = ({ label, value, onChange, place
         placeholder={placeholder}
         rows={rows}
         maxLength={maxLength}
-        className="w-full p-3 bg-white border-2 border-gray-900 text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 transition-colors duration-200 resize-y"
+        className="w-full p-3 bg-white border-2 border-black text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-200 resize-y"
       />
     </div>
   );
