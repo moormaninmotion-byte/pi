@@ -28,7 +28,7 @@ const OutputCard: React.FC<OutputCardProps> = ({ title, subtitle, content, isLoa
           <h3 className={`text-xl font-bold text-gray-900`}>{title}</h3>
         </div>
         <div className="flex items-center gap-3 text-xs text-gray-600">
-            <span>{subtitle}</span>
+            <span className="text-right">{subtitle}</span>
             {(inputTokens !== undefined && outputTokens !== undefined && !isLoading && content) && (
                 <span className="bg-white px-2 py-1 border border-gray-900">
                     IN: {inputTokens} | OUT: {outputTokens}
