@@ -1,5 +1,15 @@
 steps:
-  # 1. Build the container image
+  # 1. Install dependencies
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+    id: 'Install Dependencies'
+
+  # 2. Build the application
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+    id: 'Build Application'
+
+  # 3. Build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
@@ -8,14 +18,14 @@ steps:
       - '.'
     id: 'Build Docker Image'
 
-  # 2. Push the container image to Artifact Registry
+  # 4. Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
     id: 'Push to Artifact Registry'
 
-  # 3. Deploy to Cloud Run
+  # 5. Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     args:
