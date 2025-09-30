@@ -1,0 +1,37 @@
+steps:
+  # 1. Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
+      - '.'
+    id: 'Build Docker Image'
+
+  # 2. Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
+    id: 'Push to Artifact Registry'
+
+  # 3. Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'prompt-injection-sim' # Name of the Cloud Run service
+      - '--image'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--quiet'
+    id: 'Deploy to Cloud Run'
+
+# Store the image in Artifact Registry
+images:
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
