@@ -1,0 +1,13 @@
+node_modules
+.git
+.gitignore
+dist
+build
+*.log
+venv
+__pycache__
+Dockerfile
+.dockerignore
+README.md
+cloudbuild.yaml
+*.local
