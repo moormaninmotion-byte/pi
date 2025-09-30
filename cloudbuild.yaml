@@ -1,47 +1,41 @@
+
 steps:
-  # 1. Install dependencies
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['install']
-    id: 'Install Dependencies'
-
-  # 2. Build the application
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['run', 'build']
-    id: 'Build Application'
-
-  # 3. Build the container image
+  # Step 1: Build the container image using Docker.
+  # The '-t' flag tags the image with a name following the format: gcr.io/PROJECT_ID/IMAGE_NAME:TAG
+  # We use the commit SHA as the tag for unique versioning.
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'build'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
-      - '.'
-    id: 'Build Docker Image'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/Vulai:$COMMIT_SHA', '.']
 
-  # 4. Push the container image to Artifact Registry
+  # Step 2: Push the built container image to Google Container Registry (GCR).
+  # This makes the image available for deployment services like Cloud Run.
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
-    id: 'Push to Artifact Registry'
+    args: ['push', 'gcr.io/$PROJECT_ID/Vulai:$COMMIT_SHA']
 
-  # 5. Deploy to Cloud Run
+  # Step 3: Deploy the new container image to Google Cloud Run.
+  # This step uses the gcloud CLI to update the service.
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
+    entrypoint: gcloud
     args:
+      # The 'run deploy' command creates a new revision of a service.
       - 'run'
       - 'deploy'
-      - 'prompt-injection-sim' # Name of the Cloud Run service
-      - '--image'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
-      - '--region'
-      - 'us-central1'
-      - '--platform'
-      - 'managed'
+      # The name of the Cloud Run service. You can change this.
+      - 'Vulai'
+      # Specify the exact image to deploy, using the tag from the build step.
+      - '--image=gcr.io/$PROJECT_ID/Vulai:$COMMIT_SHA'
+      # IMPORTANT: Change this to your preferred Google Cloud region.
+      - '--region=us-east5'
+      # Specify the execution environment. 'managed' is for the serverless platform.
+      - '--platform=managed'
+      # This flag makes the service publicly accessible over the internet.
       - '--allow-unauthenticated'
-      - '--quiet'
-    id: 'Deploy to Cloud Run'
+      # The port your application listens on inside the container. Nginx defaults to 80.
+      - '--port=8080'
 
-# Store the image in Artifact Registry
+# A list of images created by this build that should be stored in GCR.
 images:
-  - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
+  - 'gcr.io/$PROJECT_ID/Vulai:$COMMIT_SHA'
+
+# Configuration for build logging.
+options:
+  logging: CLOUD_LOGGING_ONLY
