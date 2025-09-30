@@ -17,6 +17,15 @@
               sans: ['Roboto', 'sans-serif'],
               serif: ['Roboto Slab', 'serif'],
             },
+            animation: {
+              shimmer: 'shimmer 2s linear infinite',
+            },
+            keyframes: {
+              shimmer: {
+                'from': { backgroundPosition: '200% 0' },
+                'to': { backgroundPosition: '-200% 0' },
+              },
+            },
           },
         },
       };
@@ -24,14 +33,14 @@
 <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.1.1/",
     "react": "https://aistudiocdn.com/react@^19.1.1",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.21.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
-    "vite": "https://aistudiocdn.com/vite@^7.1.7",
-    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.4",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.21.0",
+    "react-markdown": "https://aistudiocdn.com/react-markdown@^10.1.0",
     "remark-gfm": "https://aistudiocdn.com/remark-gfm@^4.0.1",
-    "react-markdown": "https://aistudiocdn.com/react-markdown@^10.1.0"
+    "vite": "https://aistudiocdn.com/vite@^7.1.7",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.4"
   }
 }
 </script>
