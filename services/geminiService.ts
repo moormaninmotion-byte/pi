@@ -17,6 +17,10 @@ export async function runQuery(prompt: string, apiKey: string, useGoogleSearch: 
   try {
     const ai = new GoogleGenAI({ apiKey });
 
+    // Prepend an instruction to the prompt to make the model aware of the size constraint.
+    // This helps prevent the model's output from being cut off abruptly.
+    const finalPrompt = `Your response must be concise and complete, and strictly less than 1000 characters. Do not leave sentences unfinished.\n\n---\n\n${prompt}`;
+
     // Configuration for the generation request.
     const config = {
         // Disable thinking for faster, more direct responses suitable for this demo.
@@ -32,7 +36,7 @@ export async function runQuery(prompt: string, apiKey: string, useGoogleSearch: 
     
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: prompt,
+      contents: finalPrompt,
       config: config
     });
     
