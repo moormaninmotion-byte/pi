@@ -4,7 +4,7 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'us-east5-docker.pkg.dev/gen-lang-client-0473731579/prompt-sim-repo/prompt-injection-sim:latest'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
       - '.'
     id: 'Build Docker Image'
 
@@ -12,7 +12,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'us-east5-docker.pkg.dev/gen-lang-client-0473731579/prompt-sim-repo/prompt-injection-sim:latest'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
     id: 'Push to Artifact Registry'
 
   # 3. Deploy to Cloud Run
@@ -23,9 +23,9 @@ steps:
       - 'deploy'
       - 'prompt-injection-sim' # Name of the Cloud Run service
       - '--image'
-      - 'us-east5-docker.pkg.dev/gen-lang-client-0473731579/prompt-sim-repo/prompt-injection-sim:latest'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
       - '--region'
-      - 'us-east5'
+      - 'us-central1'
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
@@ -34,4 +34,4 @@ steps:
 
 # Store the image in Artifact Registry
 images:
-  - 'us-east5-docker.pkg.dev/gen-lang-client-0473731579/prompt-sim-repo/prompt-injection-sim:latest'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/prompt-sim-repo/prompt-injection-sim:latest'
