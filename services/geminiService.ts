@@ -1,8 +1,8 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI, GenerationConfig, Tool } from "@google/genai";
 
 /**
  * Executes a query against the Google Gemini API.
- * 
+ *
  * @param prompt The full text prompt to send to the model.
  * @param apiKey The user's Gemini API key.
  * @param useGoogleSearch A boolean flag to enable or disable the Google Search tool.
@@ -15,37 +15,47 @@ export async function runQuery(prompt: string, apiKey: string, useGoogleSearch: 
   }
 
   try {
-    const ai = new GoogleGenAI({ apiKey });
+    // Correctly instantiate the main AI client
+    const genAI = new GoogleGenerativeAI(apiKey);
 
     // Prepend an instruction to the prompt to make the model aware of the size constraint.
     // This helps prevent the model's output from being cut off abruptly.
     const finalPrompt = `Your response must be concise and complete, and strictly less than 1000 characters. Do not leave sentences unfinished.\n\n---\n\n${prompt}`;
 
     // Configuration for the generation request.
-    const config = {
-        // Disable thinking for faster, more direct responses suitable for this demo.
-        // This can sometimes reduce the quality of complex reasoning but is good for simple tasks.
-        thinkingConfig: { thinkingBudget: 0 },
-        // A temperature of 0.7 provides a balance between creativity and determinism.
-        temperature: 0.7,
-        // Limit the output to approximately 1000 characters (1 token ~ 4 chars).
-        maxOutputTokens: 250,
-        // Conditionally add the Google Search tool if the user has enabled it.
-        tools: useGoogleSearch ? [{googleSearch: {}}] : undefined,
+    const generationConfig: GenerationConfig = {
+      // A temperature of 0.7 provides a balance between creativity and determinism.
+      temperature: 0.7,
+      // Limit the output to approximately 1000 characters (1 token ~ 4 chars).
+      maxOutputTokens: 250,
     };
-    
-    const result = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: finalPrompt,
-      config: config
+
+    // Conditionally add the Google Search tool if the user has enabled it.
+    const tools: Tool[] | undefined = useGoogleSearch ? [{ googleSearch: {} }] : undefined;
+
+    // --- FIX 1: Get the model instance first ---
+    // Pass the model name and configuration here.
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-pro', // Using a standard, stable model name
+      generationConfig,
+      tools,
     });
+
+    // --- FIX 2: Call generateContent on the model and pass only the prompt ---
+    const result = await model.generateContent(finalPrompt);
+
+    // --- FIX 3: Use the .text() helper function for clean and simple response extraction ---
+    const response = result.response;
+    const text = response.text();
     
-    // Directly return the text response from the API.
-    return result.response.candidates[0].content.parts[0].text;
+    return text;
+
   } catch (error) {
     // Log the full error for debugging purposes.
     console.error("Error calling Gemini API:", error);
     // Re-throw the error so the component layer can catch it and display a user-friendly message.
-    throw error;
+    // Add more context to the error for better user feedback.
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+    throw new Error(`Failed to get a response from the model. Details: ${errorMessage}`);
   }
 }
