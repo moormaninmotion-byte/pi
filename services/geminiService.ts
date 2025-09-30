@@ -34,14 +34,14 @@ export async function runQuery(prompt: string, apiKey: string, useGoogleSearch: 
         tools: useGoogleSearch ? [{googleSearch: {}}] : undefined,
     };
     
-    const response = await ai.models.generateContent({
+    const result = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: finalPrompt,
       config: config
     });
     
     // Directly return the text response from the API.
-    return response.text;
+    return result.response.candidates[0].content.parts[0].text;
   } catch (error) {
     // Log the full error for debugging purposes.
     console.error("Error calling Gemini API:", error);
