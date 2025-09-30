@@ -4,12 +4,12 @@ steps:
   # The '-t' flag tags the image with a name following the format: gcr.io/PROJECT_ID/IMAGE_NAME:TAG
   # We use the commit SHA as the tag for unique versioning.
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/Vulai:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/vulai:$COMMIT_SHA', '.']
 
   # Step 2: Push the built container image to Google Container Registry (GCR).
   # This makes the image available for deployment services like Cloud Run.
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/Vulai:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/vulai:$COMMIT_SHA']
 
   # Step 3: Deploy the new container image to Google Cloud Run.
   # This step uses the gcloud CLI to update the service.
@@ -20,9 +20,9 @@ steps:
       - 'run'
       - 'deploy'
       # The name of the Cloud Run service. You can change this.
-      - 'Vulai'
-      # Specify the exact image to deploy, using the tag from the build step.
-      - '--image=gcr.io/$PROJECT_ID/Vulai:$COMMIT_SHA'
+      - 'vulai'
+      # Specify the exact image to deploy, using the tag from the build step. -
+      - '--image=gcr.io/$PROJECT_ID/vulai:$COMMIT_SHA'
       # IMPORTANT: Change this to your preferred Google Cloud region.
       - '--region=us-east5'
       # Specify the execution environment. 'managed' is for the serverless platform.
@@ -34,7 +34,7 @@ steps:
 
 # A list of images created by this build that should be stored in GCR.
 images:
-  - 'gcr.io/$PROJECT_ID/Vulai:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/vulai:$COMMIT_SHA'
 
 # Configuration for build logging.
 options:
