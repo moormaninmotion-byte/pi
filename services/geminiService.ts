@@ -26,10 +26,10 @@ export async function runQuery(prompt: string, apiKey: string, useGoogleSearch: 
         tools: useGoogleSearch ? [{googleSearch: {}}] : undefined,
     };
     
-    const result = await ai.models.generateContent({
-      model: 'gemini-pro',
-      contents: [{ parts: [{ text: finalPrompt }] }], 
-      ...config
+const result = await ai.models.generateContent({
+      model: 'gemini-1.0-pro',
+      contents: [{ parts: [{ text: finalPrompt }] }], 
+      ...config
     });
     
     // --- THE FIX for TypeScript Strictness ---
@@ -52,4 +52,5 @@ export async function runQuery(prompt: string, apiKey: string, useGoogleSearch: 
     throw new Error(`Failed to get a response from the model. Details: ${errorMessage}`);
   }
 }
+
 
