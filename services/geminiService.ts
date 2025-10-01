@@ -27,7 +27,7 @@ export async function runQuery(prompt: string, apiKey: string, useGoogleSearch: 
     };
     
 const result = await ai.models.generateContent({
-      model: 'gemini-1.0-pro',
+      model: 'gemini-2.0-flash-lite',
       contents: [{ parts: [{ text: finalPrompt }] }], 
       ...config
     });
@@ -52,5 +52,6 @@ const result = await ai.models.generateContent({
     throw new Error(`Failed to get a response from the model. Details: ${errorMessage}`);
   }
 }
+
 
 
